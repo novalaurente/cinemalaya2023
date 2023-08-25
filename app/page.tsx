@@ -5,17 +5,22 @@ import { convertTo24HourFormat } from './utils';
 import { filmData } from './filmData';
 
 export default function App() {
-  const locations = Array.from([...new Set(filmData.map((item) => item.location))]);
+  const locations = filmData
+    .map((item) => item.location)
+    .filter((value, index, self) => self.indexOf(value) === index);
 
-  const dates = Array.from([...new Set(filmData.map((item) => item.date))]).sort((a, b) => {
-    const dateA = new Date(`2023 ${a}`);
-    const dateB = new Date(`2023 ${b}`);
-    return dateA - dateB;
-  });
+  const dates = filmData
+    .map((item) => item.date)
+    .filter((value, index, self) => self.indexOf(value) === index)
+    .sort((a, b) => {
+      const dateA: any = new Date(`2023 ${a}`);
+      const dateB: any = new Date(`2023 ${b}`);
+      return dateA - dateB;
+    });
 
   const [activeFilter, setActiveFilter] = useState({
-    location: null,
-    date: null,
+    location: '',
+    date: '',
   });
 
   const filteredData = filmData
@@ -24,22 +29,22 @@ export default function App() {
         (!activeFilter.location || item.location === activeFilter.location) &&
         (!activeFilter.date || item.date === activeFilter.date)
     )
-    .sort((a, b) => {
+    .sort((a: any, b: any) => {
       // First, sort by location
       if (a.location !== b.location) {
         return a.location.localeCompare(b.location);
       }
 
       // If the films are the same, sort by date
-      const dateA = new Date(`2023 ${a.date}`);
-      const dateB = new Date(`2023 ${b.date}`);
+      const dateA: any = new Date(`2023 ${a.date}`);
+      const dateB: any = new Date(`2023 ${b.date}`);
       if (dateA - dateB !== 0) {
         return dateA - dateB;
       }
 
       // If the dates are the same, sort by time
-      const timeA = new Date(`2023 01 01 ${convertTo24HourFormat(a.time)}`);
-      const timeB = new Date(`2023 01 01 ${convertTo24HourFormat(b.time)}`);
+      const timeA: any = new Date(`2023 01 01 ${convertTo24HourFormat(a.time)}`);
+      const timeB: any = new Date(`2023 01 01 ${convertTo24HourFormat(b.time)}`);
       if (timeA - timeB !== 0) {
         return timeA - timeB;
       }
@@ -53,9 +58,9 @@ export default function App() {
       <div className='m-4 text-lg'>
         <button
           className={`px-4 py-2 rounded border ${
-            activeFilter.location === null ? 'bg-blue-900 text-white' : 'bg-white border-gray-300'
+            activeFilter.location === '' ? 'bg-blue-900 text-white' : 'bg-white border-gray-300'
           } hover:bg-blue-900 hover:text-white`}
-          onClick={() => setActiveFilter({ ...activeFilter, location: null })}>
+          onClick={() => setActiveFilter({ ...activeFilter, location: '' })}>
           All
         </button>
         {locations.map((location) => (
@@ -74,9 +79,9 @@ export default function App() {
       <div className='m-4 text-sm'>
         <button
           className={`px-4 py-2 rounded border ${
-            activeFilter.date === null ? 'bg-blue-900 text-white' : 'bg-white border-gray-300'
+            activeFilter.date === '' ? 'bg-blue-900 text-white' : 'bg-white border-gray-300'
           } hover:bg-blue-900 hover:text-white`}
-          onClick={() => setActiveFilter({ ...activeFilter, date: null })}>
+          onClick={() => setActiveFilter({ ...activeFilter, date: '' })}>
           All
         </button>
         {dates.map((date) => (

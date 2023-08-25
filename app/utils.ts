@@ -1,4 +1,4 @@
-export const convertTo24HourFormat = (timeString) => {
+export const convertTo24HourFormat = (timeString: any) => {
   const [time, period] = timeString.split(' ');
   const [hours, minutes] = time.split(':');
   let hour = parseInt(hours);
